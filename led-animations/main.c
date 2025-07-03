@@ -53,6 +53,9 @@ static void reset_timers(void)
 void main(void)
 {
     uint8_t i = 0;
+    uint8_t j = 0;
+    TRISA = 0x00;       // PORTA as output
+    PORTA = 0b00000000; // All pins of PORTA off
     TRISB = 0x00;       // PORTB as output
     PORTB = 0b00000000; // All pins of PORTB off
 
@@ -60,12 +63,14 @@ void main(void)
 
     while (true) {
         /* ANIMATION 1: blink 4 LEDs and then other 4 LEDs */
+        PORTA = 0b00001111;
         PORTB = 0b11110000;
         while (delay_pause < COUNT_PAUSE);
         reset_timers();
 
         while (animation_repeats < REPEAT_ANIMATION_COUNT_1) {
             if (delay_transition == COUNT_TRANSITION_1) {
+                PORTA = ~(PORTA);
                 PORTB = ~(PORTB);
                 delay_transition = 0;
                 animation_repeats++;
@@ -74,12 +79,14 @@ void main(void)
         reset_timers();
         
         /* ANIMATION 2: alternate blinking LEDs */
+        PORTA = 0b00001010;
         PORTB = 0b10101010;
         while (delay_pause < COUNT_PAUSE);
         reset_timers();
 
         while (animation_repeats < REPEAT_ANIMATION_COUNT_1) {
             if (delay_transition == COUNT_TRANSITION_2) {
+                PORTA = ~(PORTA);
                 PORTB = ~(PORTB);
                 delay_transition = 0;
                 animation_repeats++;
@@ -88,44 +95,59 @@ void main(void)
         reset_timers();
 
         /* ANIMATION 3: shift LED ON to the right */
-        PORTB = 0b00000001;
-        i = PORTB;
+        i = 0b00000000;
+        j = 0b00000000;
+        PORTA = i;
+        PORTB = j;
         while (delay_pause < COUNT_PAUSE);
         reset_timers();
 
         while (animation_repeats < REPEAT_ANIMATION_COUNT_2) {
-            if (delay_transition == COUNT_TRANSITION_1) {
-                i <<= 1;
-                if (i == 16) {
-                    i = 0b00000001;
-                    animation_repeats++;
-                }
-                PORTB = i;
+            for (i = 0b00000001; i < 16; i <<= 1) {
+                PORTA = i;
+                while (delay_transition < COUNT_TRANSITION_1);
                 delay_transition = 0;
             }
+            PORTA = 0b00000000;
+
+            for (j = 0b00000001; j < 16; j <<= 1) {
+                PORTB = j;
+                while (delay_transition < COUNT_TRANSITION_1);
+                delay_transition = 0;
+            }
+            PORTB = 0b00000000;
+            animation_repeats++;
         }
         reset_timers();
 
         /* ANIMATION 4: shift LED ON to the left */
-        PORTB = 0b00001000;
-        i = PORTB;
+        i = 0b00000000;
+        j = 0b00000000;
+        PORTA = i;
+        PORTB = j;
         while (delay_pause < COUNT_PAUSE);
         reset_timers();
 
         while (animation_repeats < REPEAT_ANIMATION_COUNT_2) {
-            if (delay_transition == COUNT_TRANSITION_1) {
-                i >>= 1;
-                if (i == 0) {
-                    i = 0b00001000;
-                    animation_repeats++;
-                }
-                PORTB = i;
+            for (j = 0b00001000; j > 0; j >>= 1) {
+                PORTB = j;
+                while (delay_transition < COUNT_TRANSITION_1);
                 delay_transition = 0;
             }
+            PORTB = 0b00000000;
+
+            for (i = 0b00001000; i > 0; i >>= 1) {
+                PORTA = i;
+                while (delay_transition < COUNT_TRANSITION_1);
+                delay_transition = 0;
+            }
+            PORTA = 0b00000000;
+            animation_repeats++;
         }
         reset_timers();
 
         /* End of animations */
+        PORTA = 0b00000000;
         PORTB = 0b00000000;
         while (delay_pause < COUNT_PAUSE);
         reset_timers();
