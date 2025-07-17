@@ -110,7 +110,7 @@ void main(void)
             }
             PORTA = 0b00000000;
 
-            for (j = 0b00000001; j < 16; j <<= 1) {
+            for (j = 0b00000001; j != 0; j <<= 1) {
                 PORTB = j;
                 while (delay_transition < COUNT_TRANSITION_1);
                 delay_transition = 0;
@@ -129,7 +129,7 @@ void main(void)
         reset_timers();
 
         while (animation_repeats < REPEAT_ANIMATION_COUNT_2) {
-            for (j = 0b00001000; j > 0; j >>= 1) {
+            for (j = 0b10000000; j > 0; j >>= 1) {
                 PORTB = j;
                 while (delay_transition < COUNT_TRANSITION_1);
                 delay_transition = 0;
