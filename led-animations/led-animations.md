@@ -2,6 +2,10 @@
 
 The microcontroller runs different LED animations. The user can change to the next animation when pressing the push button.
 
+## Circuit diagram
+
+![](./imgs/sch-led-animations.png)
+
 ## Compile project
 ```
 make
@@ -15,6 +19,7 @@ pk2cmd -P PIC16F84A -X -M -R -F bin/led-animations.hex
 # Or instead you can use the make file target:
 make flash
 ```
+
 ## References
 - https://github.com/cheavornkh/Khmer-Learn-Microcontroller/blob/master/LED%20Flashing%204%20Mode/code.c
 - [YouTube: 12 Channel LED Chaser PIC16F84A](https://www.youtube.com/watch?v=DVMx4DwvFEA)
