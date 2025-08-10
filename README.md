@@ -11,4 +11,4 @@ I use the following software, tools and compiler to program and flash the microc
 ## Projects
 
 ### led-animations:
-This project runs different LED animations. The user can change to a different animation when the push butto is pressed.
+This project runs different LED animations. The user can change to a different animation when the push button is pressed.
