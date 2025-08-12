@@ -7,7 +7,7 @@
  */
 
 #define NO_BIT_DEFINES
-#include <pic14regs.h>
+#include <pic16regs.h>
 #include <stdint.h>
 #include <stdbool.h>
 
