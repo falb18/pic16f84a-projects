@@ -54,7 +54,7 @@ void main(void)
 {
     uint8_t i = 0;
     uint8_t j = 0;
-    TRISA = 0x00;       // PORTA as output
+    TRISA = 0b00010000; // PA0 - PA3 as output, PA4 as input
     PORTA = 0b00000000; // All pins of PORTA off
     TRISB = 0x00;       // PORTB as output
     PORTB = 0b00000000; // All pins of PORTB off
@@ -75,6 +75,10 @@ void main(void)
                 delay_transition = 0;
                 animation_repeats++;
             }
+
+            if (PORTAbits.RA4 == 0) {
+                break;
+            }
         }
         reset_timers();
         
@@ -90,6 +94,10 @@ void main(void)
                 PORTB = ~(PORTB);
                 delay_transition = 0;
                 animation_repeats++;
+            }
+
+            if (PORTAbits.RA4 == 0) {
+                break;
             }
         }
         reset_timers();
@@ -143,6 +151,10 @@ void main(void)
             }
             PORTA = 0b00000000;
             animation_repeats++;
+
+            if (PORTAbits.RA4 == 0) {
+                break;
+            }
         }
         reset_timers();
 
