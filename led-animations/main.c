@@ -16,8 +16,9 @@ static __code uint16_t __at (_CONFIG) configword1 = _CP_OFF & _WDT_OFF & _PWRTE_
 
 #define TMR0_COUNT 100 // Time overflow set to 5 ms
 #define COUNT_PAUSE 60          // 60 * 5ms = 300 ms
-#define COUNT_TRANSITION_1 20   // 20 * 5ms = 100 ms
-#define COUNT_TRANSITION_2 50   // 50 * 5ms = 250 ms
+#define COUNT_TRANSITION_1 15   // 10 * 5MS = 75 ms
+#define COUNT_TRANSITION_2 20   // 20 * 5ms = 100 ms
+#define COUNT_TRANSITION_3 50   // 50 * 5ms = 250 ms
 #define REPEAT_ANIMATION_COUNT_1 8
 #define REPEAT_ANIMATION_COUNT_2 4
 
@@ -69,7 +70,7 @@ void main(void)
         reset_timers();
 
         while (animation_repeats < REPEAT_ANIMATION_COUNT_1) {
-            if (delay_transition == COUNT_TRANSITION_1) {
+            if (delay_transition == COUNT_TRANSITION_2) {
                 PORTA = ~(PORTA);
                 PORTB = ~(PORTB);
                 delay_transition = 0;
@@ -89,7 +90,7 @@ void main(void)
         reset_timers();
 
         while (animation_repeats < REPEAT_ANIMATION_COUNT_1) {
-            if (delay_transition == COUNT_TRANSITION_2) {
+            if (delay_transition == COUNT_TRANSITION_3) {
                 PORTA = ~(PORTA);
                 PORTB = ~(PORTB);
                 delay_transition = 0;
