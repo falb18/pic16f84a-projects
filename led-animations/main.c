@@ -82,28 +82,8 @@ void main(void)
             }
         }
         reset_timers();
-        
-        /* ANIMATION 2: alternate blinking LEDs */
-        PORTA = 0b00001010;
-        PORTB = 0b10101010;
-        while (delay_pause < COUNT_PAUSE);
-        reset_timers();
 
-        while (animation_repeats < REPEAT_ANIMATION_COUNT_1) {
-            if (delay_transition == COUNT_TRANSITION_3) {
-                PORTA = ~(PORTA);
-                PORTB = ~(PORTB);
-                delay_transition = 0;
-                animation_repeats++;
-            }
-
-            if (PORTAbits.RA4 == 0) {
-                break;
-            }
-        }
-        reset_timers();
-
-        /* ANIMATION 3: shift LED ON from right to left and vice-versa */
+        /* ANIMATION 2: shift LED ON from right to left and vice-versa */
         i = 0b00000000;
         j = 0b00000000;
         PORTA = i;
@@ -167,6 +147,26 @@ void main(void)
         }
 
     END_ANIMATION_3:
+        reset_timers();
+        
+        /* ANIMATION 3: alternate blinking LEDs */
+        PORTA = 0b00001010;
+        PORTB = 0b10101010;
+        while (delay_pause < COUNT_PAUSE);
+        reset_timers();
+
+        while (animation_repeats < REPEAT_ANIMATION_COUNT_1) {
+            if (delay_transition == COUNT_TRANSITION_3) {
+                PORTA = ~(PORTA);
+                PORTB = ~(PORTB);
+                delay_transition = 0;
+                animation_repeats++;
+            }
+
+            if (PORTAbits.RA4 == 0) {
+                break;
+            }
+        }
         reset_timers();
 
         /* End of animations */
