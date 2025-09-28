@@ -28,6 +28,7 @@ volatile uint16_t delay_transition = 0;
 static uint8_t animation_repeats = 0;
 static uint8_t i = 0;
 static uint8_t j = 0;
+static uint8_t k = 0;
 
 static void interrupt_vector(void) __interrupt (0)
 {
@@ -231,6 +232,109 @@ END_ANIMATION_4:
 
 }
 
+static void animation_05(void)
+{
+    i = 0b00000001;
+    j = 0b00000000;
+    PORTA = i;
+    PORTB = j;
+    while (delay_pause < COUNT_PAUSE);
+    reset_timers();
+
+    for (k = 0; k < 11; k++) {
+        if (k < 3) {
+            PORTA = i;
+            i <<= 1;
+            i += 1;
+        } else if (k == 3) {
+            PORTA = 0b00001111;
+            j = 0b00000001;
+        } else {
+            j <<= 1;
+            j += 1;
+            PORTB = j;
+        }
+        while (delay_transition < COUNT_TRANSITION_1) {
+            if (PORTAbits.RA4 == 0) {
+                goto END_ANIMATION_5;
+            }
+        }
+        delay_transition = 0;
+    }
+
+    for (k = 0; k < 12; k++) {
+        if (k < 4) {
+            PORTA = i;
+            i <<= 1;
+        } else if (k == 4) {
+            PORTA = 0b00000000;
+        } else {
+            j <<= 1;
+            PORTB = j;
+        }
+        while (delay_transition < COUNT_TRANSITION_1) {
+            if (PORTAbits.RA4 == 0) {
+                goto END_ANIMATION_5;
+            }
+        }
+        delay_transition = 0;
+    }
+
+    while (delay_transition < COUNT_TRANSITION_1) {
+        if (PORTAbits.RA4 == 0) {
+            goto END_ANIMATION_5;
+        }
+    }
+    delay_transition = 0;
+
+    j = 0b10000000;
+    i = 0b00000000;
+
+    for (k = 0; k < 12; k++) {
+        while (delay_transition < COUNT_TRANSITION_1) {
+            if (PORTAbits.RA4 == 0) {
+                goto END_ANIMATION_5;
+            }
+        }
+        delay_transition = 0;
+
+        if (k < 7) {
+            j >>= 1;
+            j |= 0b10000000;
+            PORTB = j;
+        } else if (k == 7) {
+            PORTB = 0b11111111;
+            i = 0b00001000;
+            PORTA = i;
+        } else {
+            i >>= 1;
+            i |= 0b00001000;
+            PORTA = i;
+        }
+    }
+
+    for (k = 0; k < 12; k++) {
+        if (k < 8) {
+            PORTB = j;
+            j >>= 1;
+        } else if (k == 8) {
+            PORTB = 0b00000000;
+        } else {
+            i >>= 1;
+            PORTA = i;
+        }
+        while (delay_transition < COUNT_TRANSITION_1) {
+            if (PORTAbits.RA4 == 0) {
+                goto END_ANIMATION_5;
+            }
+        }
+        delay_transition = 0;
+    }
+
+END_ANIMATION_5:
+
+}
+
 void main(void)
 {
     TRISA = 0b00010000; // PA0 - PA3 as output, PA4 as input
@@ -252,6 +356,8 @@ void main(void)
         reset_timers();
 
         animation_04();
+
+        animation_05();
         reset_timers();
 
         /* End of animations */
