@@ -17,6 +17,7 @@ make
 pk2cmd -P PIC16F84A -X -M -R -F bin/led-animations.hex
 
 # Or instead you can use the make file target:
+make
 make flash
 ```
 
