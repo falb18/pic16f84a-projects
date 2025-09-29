@@ -10,5 +10,8 @@ I use the following software, tools and compiler to program and flash the microc
 
 ## Projects
 
-### led-animations:
+### Led animations:
 This project runs different LED animations. The user can change to a different animation when the push button is pressed.
+
+### Seven segment timer:
+This is an implementation of a timer where the time is diplayed in seven-segment displays.
