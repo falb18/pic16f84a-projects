@@ -87,8 +87,19 @@ static void animation_02(void)
     reset_timers();
 
     while (animation_repeats < 2) {
-        for (i = 0b00000001; i < 16; i <<= 1) {
-            PORTA = i;
+        i = 0b00000001;
+        for (k = 0; k < 12; k++) {
+            if (k < 4) {
+                PORTA = i;
+                i <<= 1;
+            } else if (k == 4) {
+                PORTA = 0b00000000;
+                j = 0b00000001;
+                PORTB = j;
+            } else {
+                j <<= 1;
+                PORTB = j;
+            }
             while (delay_transition < COUNT_TRANSITION_1) {
                 if (PORTAbits.RA4 == 0) {
                     goto END_ANIMATION_2;
@@ -96,18 +107,6 @@ static void animation_02(void)
             }
             delay_transition = 0;
         }
-        PORTA = 0b00000000;
-
-        for (j = 0b00000001; j != 0; j <<= 1) {
-            PORTB = j;
-            while (delay_transition < COUNT_TRANSITION_1) {
-                if (PORTAbits.RA4 == 0) {
-                    goto END_ANIMATION_2;
-                }
-            }
-            delay_transition = 0;
-        }
-        PORTB = 0b00000000;
 
         i = 0b00000000;
         j = 0b00000000;
@@ -116,8 +115,19 @@ static void animation_02(void)
         while (delay_pause < COUNT_PAUSE);
         delay_transition = 0;
 
-        for (j = 0b10000000; j > 0; j >>= 1) {
-            PORTB = j;
+        j = 0b10000000;
+        for (k = 0; k < 12; k++) {
+            if (k < 8) {
+                PORTB = j;
+                j >>= 1;
+            } else if (k == 8) {
+                PORTB = 0b00000000;
+                i = 0b00001000;
+                PORTA = i;
+            } else {
+                i >>= 1;
+                PORTA = i;
+            }
             while (delay_transition < COUNT_TRANSITION_1) {
                 if (PORTAbits.RA4 == 0) {
                     goto END_ANIMATION_2;
@@ -125,18 +135,6 @@ static void animation_02(void)
             }
             delay_transition = 0;
         }
-        PORTB = 0b00000000;
-
-        for (i = 0b00001000; i > 0; i >>= 1) {
-            PORTA = i;
-            while (delay_transition < COUNT_TRANSITION_1) {
-                if (PORTAbits.RA4 == 0) {
-                    goto END_ANIMATION_2;
-                }
-            }
-            delay_transition = 0;
-        }
-        PORTA = 0b00000000;
 
         animation_repeats++;
     }
@@ -177,8 +175,19 @@ static void animation_04(void)
     while (delay_pause < COUNT_PAUSE);
     reset_timers();
 
-    for (i = 0b00000001; i < 16; i <<= 1) {
-        PORTA = ~(i);
+    i = 0b00000001;
+    for (k = 0; k < 12; k++) {
+        if (k < 4) {
+            PORTA = ~(i);
+            i <<= 1;
+        } else if (k == 4) {
+            PORTA = 0b00001111;
+            j = 0b00000001;
+            PORTB = ~(j);
+        } else {
+            j <<= 1;
+            PORTB = ~(j);
+        }
         while (delay_transition < COUNT_TRANSITION_2) {
             if (PORTAbits.RA4 == 0) {
                 goto END_ANIMATION_4;
@@ -186,18 +195,6 @@ static void animation_04(void)
         }
         delay_transition = 0;
     }
-    PORTA = 0b00001111;
-
-    for (j = 0b00000001; j != 0; j <<= 1) {
-        PORTB = ~(j);
-        while (delay_transition < COUNT_TRANSITION_2) {
-            if (PORTAbits.RA4 == 0) {
-                goto END_ANIMATION_4;
-            }
-        }
-        delay_transition = 0;
-    }
-    PORTB = 0b11111111;
 
     i = 0b00001111;
     j = 0b11111111;
@@ -206,8 +203,20 @@ static void animation_04(void)
     while (delay_pause < COUNT_PAUSE);
     delay_transition = 0;
 
-    for (j = 0b10000000; j > 0; j >>= 1) {
-        PORTB = ~(j);
+    j = 0b10000000;
+    for (k = 0; k < 12; k++) {
+        if (k < 8) {
+            PORTB = ~(j);
+            j >>= 1;
+        } else if (k == 8) {
+            PORTB = 0b11111111;
+            i = 0b00001000;
+            PORTA = ~(i);
+        } else {
+            i >>= 1;
+            PORTA = ~(i);
+        }
+        
         while (delay_transition < COUNT_TRANSITION_2) {
             if (PORTAbits.RA4 == 0) {
                 goto END_ANIMATION_4;
@@ -215,18 +224,6 @@ static void animation_04(void)
         }
         delay_transition = 0;
     }
-    PORTB = 0b11111111;
-
-    for (i = 0b00001000; i > 0; i >>= 1) {
-        PORTA = ~(i);
-        while (delay_transition < COUNT_TRANSITION_2) {
-            if (PORTAbits.RA4 == 0) {
-                goto END_ANIMATION_4;
-            }
-        }
-        delay_transition = 0;
-    }
-    PORTA = 0b00001111;
 
 END_ANIMATION_4:
 
@@ -356,6 +353,7 @@ void main(void)
         reset_timers();
 
         animation_04();
+        reset_timers();
 
         animation_05();
         reset_timers();
